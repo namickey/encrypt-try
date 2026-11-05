@@ -6,6 +6,8 @@ target/
 *.log
 *.log.*
 *.xlsx
+key.txt
+ciphertext.txt
 
 ### STS ###
 .apt_generated
