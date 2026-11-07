@@ -14,7 +14,7 @@ public class Main {
         Pkcs5Encryptor.encryptAndSave("123456");
         Pkcs5Encryptor.encryptAndSave("1234567");
         Pkcs5Encryptor.encryptAndSave("12345678");
-        Pkcs5Encryptor.encryptAndSave("123456789");
-        Pkcs5Encryptor.encryptAndSave("1234567890");
+        Pkcs5Encryptor.encryptAndSave("1234567890123456");
+        Pkcs5Encryptor.encryptAndSave("12345678901234561234567890123456");
     }
 }
