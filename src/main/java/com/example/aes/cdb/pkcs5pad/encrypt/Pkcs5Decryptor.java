@@ -1,4 +1,4 @@
-package com.example.encrypt;
+package com.example.aes.cdb.pkcs5pad.encrypt;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -7,11 +7,10 @@ import java.util.Base64;
 import java.util.List;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
 
-public class Decryptor {
-    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
-    private static final int GCM_TAG_LENGTH = 128;
+public class Pkcs5Decryptor {
+    private static final String TRANSFORMATION = "AES/CBC/PKCS5Padding";
     private static final Path CIPHERTEXT_FILE = Path.of("ciphertext.txt");
 
     public static void main(String[] args) throws Exception {
@@ -19,12 +18,12 @@ public class Decryptor {
     }
 
     public static void decryptAndPrint() throws Exception {
-        if (!KeyFileGenerator.keyFileExists()) {
+        if (!Pkcs5KeyFileGenerator.keyFileExists()) {
             System.out.println("鍵ファイルが見つかりません。先に KeyFileGenerator を実行してください。");
             return;
         }
 
-        SecretKey key = KeyFileGenerator.loadKey();
+        SecretKey key = Pkcs5KeyFileGenerator.loadKey();
 
         List<String> lines = Files.readAllLines(CIPHERTEXT_FILE);
         byte[] iv = Base64.getDecoder().decode(lines.get(0));
@@ -39,7 +38,7 @@ public class Decryptor {
 
     private static String decrypt(byte[] encrypted, SecretKey key, byte[] iv) throws Exception {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
         return new String(cipher.doFinal(encrypted), StandardCharsets.UTF_8);
     }
 }

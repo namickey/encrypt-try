@@ -1,4 +1,4 @@
-package com.example.encrypt;
+package com.example.aes.cdb.pkcs5pad.encrypt;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -7,13 +7,12 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
 
-public class Encryptor {
-    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
-    private static final int GCM_TAG_LENGTH = 128;
-    // GCMのIVは96ビット(12バイト)が推奨サイズ(NIST SP 800-38D)。
-    private static final int GCM_IV_LENGTH = 12;
+public class Pkcs5Encryptor {
+    private static final String TRANSFORMATION = "AES/CBC/PKCS5Padding";
+    // CBCのIVはAESのブロックサイズと同じ16バイト固定。
+    private static final int CBC_IV_LENGTH = 16;
     private static final Path CIPHERTEXT_FILE = Path.of("ciphertext.txt");
 
     public static void main(String[] args) throws Exception {
@@ -21,15 +20,15 @@ public class Encryptor {
     }
 
     public static void encryptAndSave(String plainText) throws Exception {
-        if (!KeyFileGenerator.keyFileExists()) {
+        if (!Pkcs5KeyFileGenerator.keyFileExists()) {
             System.out.println("鍵ファイルが見つかりません。先に KeyFileGenerator を実行してください。");
             return;
         }
 
-        SecretKey key = KeyFileGenerator.loadKey();
+        SecretKey key = Pkcs5KeyFileGenerator.loadKey();
 
         // 同じ鍵でIVを再利用しないよう、暗号化ごとに新しいIVを生成する。
-        byte[] iv = new byte[GCM_IV_LENGTH];
+        byte[] iv = new byte[CBC_IV_LENGTH];
         new SecureRandom().nextBytes(iv);
 
         byte[] encrypted = encrypt(plainText.getBytes(StandardCharsets.UTF_8), key, iv);
@@ -47,7 +46,7 @@ public class Encryptor {
 
     private static byte[] encrypt(byte[] plain, SecretKey key, byte[] iv) throws Exception {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
         return cipher.doFinal(plain);
     }
 }

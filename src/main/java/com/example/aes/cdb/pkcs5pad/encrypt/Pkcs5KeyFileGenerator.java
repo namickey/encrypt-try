@@ -1,4 +1,4 @@
-package com.example.encrypt;
+package com.example.aes.cdb.pkcs5pad.encrypt;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +8,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class KeyFileGenerator {
+public class Pkcs5KeyFileGenerator {
     // IVは暗号化のたびにEncryptor側で新しく生成するため、
     // このクラスでは鍵のみを生成・保管する。
     static final Path KEY_FILE = Path.of("key.txt");
