@@ -8,6 +8,7 @@ target/
 *.xlsx
 key.txt
 ciphertext.txt
+password.txt
 
 ### STS ###
 .apt_generated

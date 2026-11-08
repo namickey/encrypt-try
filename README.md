@@ -1,5 +1,7 @@
 # encrypt-try
 
+# AES
+
 ## 鍵長・IV長
 
 | | 鍵長 | IV長 |
@@ -29,3 +31,4 @@
 - **CBC/NoPadding**: 平文がそのまま暗号文になる。16の倍数でない場合は`Input length not multiple of 16 bytes`エラーになる。
 - **CBC/PKCS5Padding**: 16バイト単位に切り上げてパディングする。平文長が16の倍数のとき(16byte, 32byte, 48byte)でも、必ず1ブロック分(16byte)の余分なパディングが追加される。
 - **GCM/NoPadding**: パディングは発生せず、平文長に認証タグ(16byte)を加えた長さになる。
+
